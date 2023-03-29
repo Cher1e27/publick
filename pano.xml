@@ -1,0 +1,527 @@
+﻿<krpano version="1.21" title="Virtual Tour" >
+    
+	
+	<include url="skin/vtourskin.xml" />
+    <include url="plugins/compassSM/compassSM.xml" />
+	 
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings maps="true"
+	               maps_type="google"
+	               maps_bing_api_key=""
+	               maps_google_api_key=""
+	               maps_zoombuttons="false"
+	               maps_loadonfirstuse="true"
+	               gyro="false"
+	               gyro_keeplookingdirection="false"
+	               webvr="true"
+	               webvr_keeplookingdirection="true"
+	               webvr_prev_next_hotspots="true"
+	               autotour="true"
+	               littleplanetintro=""
+	               followmousecontrol="false"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_buttons="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               deeplinking="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="LIGHTBLEND(1.0, 0xFFFFFF, 2.0, linear)"
+	               loadscene_blend_prev="ZOOMBLEND(2.0, 2.0, easeInOutSine)"
+	               loadscene_blend_next="ZOOMBLEND(2.0, 2.0, easeInOutSine)"
+	               loadingtext=""
+	               layout_width="0%"
+	               layout_maxwidth="814"
+	               controlbar_width="-24"
+	               controlbar_height="40"
+	               controlbar_offset="20"
+	               controlbar_offset_closed="-40"
+	               controlbar_overlap.no-fractionalscaling="10"
+	               controlbar_overlap.fractionalscaling="0"
+	               design_skin_images="vtourskin.png"
+	               design_bgcolor="0x2D3E50"
+	               design_bgalpha="0.8"
+	               design_bgborder="0"
+	               design_bgroundedge="1"
+	               design_bgshadow="0 4 10 0x000000 0.3"
+	               design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+	               design_thumbborder_padding="2"
+	               design_thumbborder_bgroundedge="0"
+	               design_text_css="color:#FFFFFF; font-family:Arial;"
+	               design_text_shadow="1"
+				   
+	               />
+    <!--плагин отвечающий за редактор кнопок-->
+	<!--plugin nam="toolbox" url="toolbox/toolboxV2.js" keep="true" preload="true" /-->
+	
+	<style name="flyoutimage"
+	       renderer="webgl"
+	       distorted="true"
+	       flying="0.0"
+	       backup_state=""
+	       backup_zorder=""
+	       flying_state="in"
+	       capture="true"
+	       onclick="flyout_hotspot()"
+	       />
+	
+    <!--Меню-->
+	<layer  name="menu" type="container" flowchildren="true" keep="true" align="lefttop" width="86" height="100%" visible="true" x="0" y="0" zorder="50" enabled="true" 
+ 			   bgcolor="0x004f59" bgalpha="1" bgcapture="true" handcursor="false" scalechildren="true" scale="1">
+			    
+				<!--Лого-->
+		        <plugin scalename="logo" type="image" zorder="100" align="top" y="25" x="center" url="menu/logo.svg" width="19" height="prop" alpha="1" keep="true" onclick="openurl('http://www.1panorama.ru',  _blank)" />
+				
+				<!--Высоты-->
+				<plugin name="vis150" type="image" zorder="100" align="top" y="215" x="center" url="menu/150_n.svg" width="38" height="prop" alpha="1" keep="true" onclick="set(plugin[vis150on].visible,true); set(plugin[vis80on].visible,false); set(plugin[vis115on].visible,false); 
+				if(plugin[daybutton].visible==true,loadscene(scene_day_150,,,BLEND(1.0, easeInCubic)),loadscene(scene_night_150,,,BLEND(1.0, easeInCubic)) );set(layer[radar].visible,true); set(layer[radar1].visible,false) "/>
+				<plugin name="vis115" type="image" zorder="100" align="top" y="245" x="center" url="menu/115_n.svg" width="38" height="prop" alpha="1" keep="true" onclick="set(plugin[vis150on].visible,false); set(plugin[vis80on].visible,false); set(plugin[vis115on].visible,true);
+                if(plugin[daybutton].visible==true,loadscene(scene_day_115,,,BLEND(1.0, easeInCubic)),loadscene(scene_night_115,,,BLEND(1.0, easeInCubic)) );set(layer[radar].visible,false) ; set(layer[radar1].visible,true)"/>
+				<plugin name="vis80" type="image" zorder="100" align="top" y="275" x="center" url="menu/80_n.svg" width="38" height="prop" alpha="1" keep="true" onclick="set(plugin[vis150on].visible,false); set(plugin[vis80on].visible,true); set(plugin[vis115on].visible,false)  ;
+				if(plugin[daybutton].visible==true,loadscene(scene_day_80,,,BLEND(1.0, easeInCubic)),loadscene(scene_night_80,,,BLEND(1.0, easeInCubic)) ); set(layer[radar].visible,false); set(layer[radar1].visible,true)"/>
+				<plugin name="vis150on" type="image" zorder="100" align="top" y="215" x="center" url="menu/150_y.svg" width="38" height="prop" alpha="1" keep="true" visible="true"	/>
+				<plugin name="vis115on" type="image" zorder="100" align="top" y="245" x="center" url="menu/115_y.svg" width="38" height="prop" alpha="1" keep="true" visible="false" />
+				<plugin name="vis80on" type="image" zorder="100" align="top" y="275" x="center" url="menu/80_y.svg" width="38" height="prop" alpha="1" keep="true" visible="false"/>
+				
+				<!--День-->
+				<plugin name="daycontainer" type="image" zorder="100" align="top" y="320" x="center" url="menu/day_fon.svg" width="38" height="prop" alpha="1" keep="true" visible="true" 
+				onclick="set(plugin[daybutton].visible, 0) ; set(plugin[daycontainer].visible, false) ; set(plugin[nightbutton].visible, 1) ; set(plugin[nightcontainer].visible, true)
+				; if(plugin[vis150on].visible==true, loadscene(scene_night_150,,,BLEND(1.0, easeInCubic)), if(plugin[vis115on].visible==true,loadscene(scene_night_115,,,BLEND(1.0, easeInCubic)),loadscene(scene_night_80,,,BLEND(1.0, easeInCubic)) ))"/>
+				<plugin name="daybutton" type="image" zorder="100" align="top" y="358" x="center" url="menu/day_but.svg" width="32" height="prop" alpha="1" keep="true" visible="true"
+				onclick="set(plugin[daybutton].visible, 0) ; set(plugin[daycontainer].visible, false) ; set(plugin[nightbutton].visible, 1) ; set(plugin[nightcontainer].visible, true);
+				if(plugin[vis150on].visible==true, loadscene(scene_night_150,,,BLEND(1.0, easeInCubic)), if(plugin[vis115on].visible==true,loadscene(scene_night_115,,,BLEND(1.0, easeInCubic)),loadscene(scene_night_80,,,BLEND(1.0, easeInCubic)) ))"/>
+				
+				<!--Ночь-->
+				<plugin name="nightcontainer" type="image" zorder="100" align="top" y="320" x="center" url="menu/night_fon.svg" width="38" height="prop" alpha="1" keep="true" visible="false"
+				onclick="set(plugin[nightbutton].visible, 0) ; set(plugin[nightcontainer].visible, false) ; set(plugin[daybutton].visible, 1) ; set(plugin[daycontainer].visible, true) ;
+				 if(plugin[vis150on].visible==true, loadscene(scene_day_150,,,BLEND(1.0, easeInCubic)), if(plugin[vis115on].visible==true,loadscene(scene_day_115,,,BLEND(1.0, easeInCubic)),loadscene(scene_day_80,,,BLEND(1.0, easeInCubic)) ))" />
+				<plugin name="nightbutton" type="image" zorder="100" align="top" y="324" x="center" url="menu/night_but.svg" width="32" height="prop" alpha="1" keep="true" visible="false"
+				onclick="set(plugin[nightbutton].visible, 0) ; set(plugin[nightcontainer].visible, false) ; set(plugin[daybutton].visible, 1) ; set(plugin[daycontainer].visible, true);
+				if(plugin[vis150on].visible==true, loadscene(scene_day_150,,,BLEND(1.0, easeInCubic)), if(plugin[vis115on].visible==true,loadscene(scene_day_115,,,BLEND(1.0, easeInCubic)),loadscene(scene_day_80,,,BLEND(1.0, easeInCubic)) ))" />
+				
+				<!--Планировки-->
+				<plugin name="check1" type="image" zorder="100" align="top" y="460" x="center" url="menu/check.svg" width="15" height="prop" alpha="1" keep="true" onclick="hideplan();"/>
+				<plugin name="check11" type="image" zorder="100" align="top" y="458" x="center" url="menu/galka.svg" width="18" height="prop" alpha="1" keep="true" onclick="hideplan();"/>
+				
+				<!--Поинты-->
+				<plugin name="check2" type="image" zorder="100" align="top" y="530" x="center" url="menu/check.svg" width="15" height="prop" alpha="1" keep="true" onclick="hideinfra();"/>
+				<plugin name="check21" type="image" zorder="100" align="top" y="528" x="center" url="menu/galka.svg" width="18" height="prop" alpha="1" keep="true" onclick="hideinfra();"/>
+				
+				<!--Виды из окон-->
+				<plugin name="check3" type="image" zorder="100" align="top" y="600" x="center" url="menu/check.svg" width="15" height="prop" alpha="1" keep="true" onclick="hidewindow();"/>
+				<plugin name="check31" type="image" zorder="100" align="top" y="598" x="center" url="menu/galka.svg" width="18" height="prop" alpha="1" keep="true" visible="true" onclick="hidewindow();"/>
+				
+				<!-- +/- и фуллскрин-->
+				<plugin name="plus" type="image" zorder="100" align="top" y="650" x="-15" url="menu/plus.svg" width="18" height="prop" alpha="1" keep="true" ondown="set(fov_moveforce,-1);"  onup="set(fov_moveforce,0);"/>
+				<plugin name="minus" type="image" zorder="100" align="top" y="650" x="15" url="menu/minus.svg" width="18" height="prop" alpha="1" keep="true" ondown="set(fov_moveforce,+1);"  onup="set(fov_moveforce,0); "/>
+				<plugin name="uv" type="image" zorder="100" align="top" y="685" x="center" url="menu/uvelich.svg" width="18" height="prop" alpha="1" keep="true" visible="true" onclick="set(fullscreen,true);"/>
+				<plugin name="um" type="image" zorder="100" align="top" y="685" x="center" url="menu/umensh.svg" width="18" height="prop" alpha="1" keep="true" visible="false" onclick="set(fullscreen,false);"/>
+				
+				<!--Надпись высота-->
+				<layer name="visota" type="image" zorder="100" align="top" y="195" x="center" url="menu/visota.svg" width="40" height="prop" alpha="1" keep="true" handcursor="false" />
+				
+				<!--Картинки с чекбоксами-->
+				<layer name="plan" type="image" zorder="100" align="top" y="415" x="center" url="menu/plan.svg" width="35" height="prop" alpha="1" keep="true" onover="set(layer[planirovki].visible,true)" onout="set(layer[planirovki].visible,false)" />
+				<layer name="points" type="image" zorder="100" align="top" y="485" x="center" url="menu/points.svg" width="35" height="prop" alpha="1" keep="true" onover="set(layer[okruzhenie].visible,true)" onout="set(layer[okruzhenie].visible,false)"/>
+				<layer name="window" type="image" zorder="100" align="top" y="555" x="center" url="menu/window.svg" width="35" height="prop" alpha="1" keep="true" onover="set(layer[vidi].visible,true)" onout="set(layer[vidi].visible,false)"/>
+				
+				<!--Скрытые надписи рядом с картинками-->
+				<layer name="planirovki" type="image" zorder="100" align="top" y="415" x="75" url="menu/plan_nd.svg" width="85" height="prop" alpha="1" keep="true" visible="false" />
+				<layer name="okruzhenie" type="image" zorder="100" align="top" y="485" x="75" url="menu/points_nd.svg" width="85" height="prop" alpha="1" keep="true" visible="false"/>
+				<layer name="vidi" type="image" zorder="100" align="top" y="555" x="75" url="menu/window_nd.svg" width="85" height="prop" alpha="1" keep="true" visible="false"/>
+				
+				
+		</layer>
+		 
+		
+	
+		<!--Карта-->
+		<layer name="map" type="image" url="Map/map.svg" keep="true" align="righttop" width="300" height="prop" visible="true" x="10" y="10" zorder="50" enabled="true" 
+ 			   bgcolor="0x004f59" bgalpha="1" bgcapture="true" alpha="0.9" handcursor="false" scalechildren="true" scale="1" maskchildren="true">
+			   
+			   
+			   
+			   <!--Квадрокоптер-->
+                <plugin type="image" zorder="100" align="center" y="100" x="-100" url="Map/point.svg"  width="10%" height="prop" alpha="1" keep="true" onclick="set(plugin[vis150on].visible,true); set(plugin[vis80on].visible,false); set(plugin[vis115on].visible,false); 
+				if(plugin[daybutton].visible==true,loadscene(scene_day_150,,,BLEND(1.0, easeInCubic)),loadscene(scene_night_150,,,BLEND(1.0, easeInCubic)) );set(layer[radar].visible,true); set(layer[radar1].visible,false) "/> 
+                <layer name="radar"  url="plugins/radar.js" parent="map" 
+				scale="0.5" align="center"  zorder="45" fillalpha="0.5" fillcolor="0x004f59"   
+				y="100" x="-100" />
+	            				
+                <plugin type="image" zorder="100" align="center" y="7" x="-20" url="Map/point.svg"  width="10%" height="prop" alpha="1" keep="true" onclick="set(plugin[vis150on].visible,false); set(plugin[vis80on].visible,false); set(plugin[vis115on].visible,true);
+                if(plugin[daybutton].visible==true,loadscene(scene_day_115,,,BLEND(1.0, easeInCubic)),loadscene(scene_night_115,,,BLEND(1.0, easeInCubic)) );set(layer[radar].visible,false) ; set(layer[radar1].visible,true)" /> 
+				<layer name="radar1"  url="plugins/radar.js" parent="map"
+				scale="0.5" align="center"  zorder="45" fillalpha="0.5" fillcolor="0x004f59"   
+				y="7" x="-20" visible="false"/>
+				
+				<!--кнопки окон-->
+				<plugin type="image" zorder="100" tag="window" align="center" y="-82" x="-60" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k1_s3_e8.jpg', 'Корпус 1 Секция 3 Этаж 8');"/>  
+				<plugin type="image" zorder="100" tag="window" align="center" y="-67" x="-112" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k1_s1_e20_2.jpg', 'Корпус 1 Секция 1 Этаж 20');"/>
+			    <plugin type="image" zorder="100" tag="window" align="center" y="-40" x="-120" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k1_s1_e20_1.jpg', 'Корпус 1 Секция 1 Этаж 20');"/>
+				<plugin type="image" zorder="100" tag="window" align="center" y="15" x="-65" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k2_s3_e8_1.jpg', 'Корпус 2 Секция 3 Этаж 8');"/>
+				<plugin type="image" zorder="100" tag="window" align="center" y="45" x="-45" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k3_s3_e8.jpg', 'Корпус 3 Секция 3 Этаж 8');"/>
+				<plugin type="image" zorder="100" tag="window" align="center" y="90" x="-10" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k3_s1_e20_1.jpg', 'Корпус 3 Секция 1 Этаж 20');"/>
+				<plugin type="image" zorder="100" tag="window" align="center" y="70" x="10" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k3_s1_e20_2.jpg', 'Корпус 3 Секция 1 Этаж 20');"/>
+				<plugin type="image" zorder="100" tag="window" align="center" y="62" x="50" url="Map/window.svg"  width="25" height="prop" alpha="1" keep="true" onclick="popup('photo/k4_s2_e8.jpg', 'Корпус 4 Секция 2 Этаж 8');"/>
+		</layer>
+		<!--открыть/закрыть карту-->
+		        <plugin name="close" type="image" zorder="95" align="righttop" y="10" x="320" url="Map/close.svg" width="32" height="prop" alpha="1" keep="true" onclick="tween(layer[map].x,-300,1); set(visible, false); set(plugin[open].visible, true); tween(plugin[open].scale,1.6,1); tween(plugin[open].x,10,1); tween(x,10,1); set(scale, 1.6)" />
+				<plugin name="open" type="image" zorder="95" align="righttop" y="10" x="320" url="Map/icon.svg" width="32" height="prop" alpha="1" keep="true" visible="false" onclick="tween(layer[map].x,10,1);tween(x,320); set(plugin[close].visible, true); set(visible, false); tween(plugin[close].scale, 1, 1.1) ;  tween(plugin[close].x,320, 1); tween(plugin[open].scale, 1,1)" />
+				
+	
+	
+	    
+		<!--создает слой с плавающим изображением-->
+		<action name="popup" scope="local" args="content, text">
+		set(control.mousefovchange,0);
+		<!--Фон-->
+		addlayer('popup_bg', popup_bg);
+		set(popup_bg,
+			type=container,
+			align=lefttop, width=100%, height=100%,
+			zorder=99,
+			bgcapture=true,
+			handcursor=true,
+			capture=true,
+			bgcolor=0x123456, onloaded=tween(bgalpha,0.7,0.5)
+			ondown="set(dragging,true); draglayer(layer[popup_image]); set(cursor, grabbing)",
+		);
+		
+		addlayer('zakr', zakr);
+		set(zakr,
+			type=image,
+			url=Map/close.svg,
+			align=righttop,
+            scale=0.3,			
+			zorder=100,
+			bgcapture=true,
+			handcursor=true,
+			capture=true,
+			onclick="popup_close();removelayer('zakr', true);",
+		);
+		
+        <!--надпись с названием-->
+        addlayer('nadpis', nadpis);
+		set(nadpis,
+		type="text", align=bottom,parent=popup_image, text=get(text), zorder=99, y=20 , css="font-family:Arial; font-size:20px; color:#FFFFFF", bgalpha=0
+		);
+		
+		<!--Фон под надпись-->
+		addlayer('fon',fon);
+		set(fon,
+		type=container, align=bottom, parent=popup_image, zorder=98, width=100%, height=10%, bgcolor=0x000000, bgalpha=0.05 
+		);
+		
+		addlayer('popup', popup);
+		 	set(popup,
+		 		bgcolor=0xFFFFFF,
+		 		bgalpha=1,
+		 	);
+		<!--Сама фотка-->	
+		addlayer("popup_image", img);
+		set(img,
+		url=get(content),
+		align=center,
+		alpha=1,
+		scale=0.6,
+		zorder=99,
+		parent=popup_bg,
+		cursor="zoom-in",
+		ondown="set(dragging,true); draglayer(); set(cursor, grabbing)",
+		onup="set(cursor,zoom-in)",
+		onclick="tween(scale,1);",
+           );
+			set(global.events[popup].onremovepano, popup_close() );
+	</action>
+	
+	
+	<!--Позволяет фотке плавать по слою-->
+	<action name="draglayer">
+	if(layer[popup_image].scale==0.5 OR layer[popup_image].scale==0.6,
+		if(%1 != dragging,
+        copy(drag_currenty, y);
+        copy(drag_stagey, mouse.stagey);
+        set(drag_sy, +0.5);
+        draglayer(dragging);
+        ,  
+        if(pressed,
+        sub(dy, mouse.stagey, drag_stagey);
+        mul(dy, drag_sy);	
+        add(y, drag_currenty, dy);
+        delayedcall(0, draglayer(dragging) ),
+          if(y LT -get(layer[popup_bg].pixelheight)/2 + get(layer[popup_image].pixelheight)/2 OR y GT get(layer[popup_bg].pixelheight)/2 - get(layer[popup_image].pixelheight)/2,popup_close();,tween(y,0,0.2);)
+          ); 
+          );,
+	if(%1 != dragging,
+    copy(drag_currentx, x);
+    copy(drag_currenty, y);
+    copy(drag_stagex, mouse.stagex);
+    copy(drag_stagey, mouse.stagey);
+    set(drag_sx, +0.5);
+    set(drag_sy, +0.5);
+    if(align == righttop, set(drag_sx,-1); );
+    if(align == right, set(drag_sx,-1); );
+    if(align == rightbottom, set(drag_sx,-1); set(drag_sy,-1); );
+    if(align == bottom, set(drag_sy,-1); );
+    if(align == leftbottom, set(drag_sy,-1); );
+    draglayer(dragging);
+    ,
+    if(pressed,
+    sub(dx, mouse.stagex, drag_stagex);
+    sub(dy, mouse.stagey, drag_stagey);
+    mul(dx, drag_sx);
+    mul(dy, drag_sy);
+    add(x, drag_currentx, dx);
+    add(y, drag_currenty, dy);
+    delayedcall(0, draglayer(dragging) );
+   
+	);
+    );
+	    
+	)
+		
+</action>
+     
+	<!--Убирает хотспоты окон-->
+		<action name="hidewindow">
+		switch(plugin[check31].visible,true,false) ;
+		 for(set(i,0), i LT plugin.count, inc(i),if(plugin[get(i)].tag == window, switch(plugin[get(i)].visible,false,true)));
+		</action>
+		
+	<!--Убирает хотспоты поинтов-->
+	 <action name="hideinfra">
+		switch(plugin[check21].visible,true,false) ;
+		 for(set(i,0), i LT hotspot.count, inc(i),if(hotspot[get(i)].tag == infrastr, switch(hotspot[get(i)].visible,false,true)));
+		</action>
+		
+    <!--Убирает планировку-->
+	 <action name="hideplan">
+		switch(plugin[check11].visible,true,false) ;
+		 for(set(i,0), i LT hotspot.count, inc(i),if(hotspot[get(i)].tag == plan, switch(hotspot[get(i)].visible,false,true)));
+		</action>
+		
+	<!--Слой с планами-->	
+	<action name="planpopup" scope="private:PLANPOPUP" args="content, text">
+		<!--Фон-->
+		addlayer('popup_bg', popup_bg);
+		set(popup_bg,
+			type=container,
+			align=lefttop, width=100%, height=100%,
+			zorder=100,
+			bgcapture=true,
+			handcursor=true,
+			capture=true,
+			bgcolor=0x123456, onloaded=tween(bgalpha,0.7,0.5)
+			ondown="set(dragging,true); draglayer(layer[popup_image]); set(cursor, grabbing)",
+		);
+		
+		<!--Сама фотка-->	
+		addlayer("popup_image", img);
+		set(img,
+		url=get(content),
+		align=center,
+		alpha=1,
+		scale=0.5,
+		zorder=99,
+		parent=popup_bg,
+		cursor="zoom-in",
+		ondown="set(dragging,true); draglayer(); set(cursor, grabbing)",
+		onup="set(cursor,zoom-in)",
+		onclick="tween(scale,1)");
+		
+        <!--надпись с названием-->
+        addlayer('nadpis', nadpis);
+		set(nadpis,
+		type="text", align=bottom,parent=popup_image, text=get(text), zorder=100, y=20 , css="font-family:Arial; font-size:30px; color:#FFFFFF", bgalpha=0
+		);
+		
+		<!--Фон под надпись-->
+		addlayer('fon',fon);
+		set(fon,
+		type=container, , align=bottom, parent=popup_image, zorder=98, width=100%, height=5%, bgcolor=0x000000, bgalpha=0.5 
+		);
+		
+			set(global.events[popup].onremovepano, popup_close() );
+	</action>	
+		 
+		 <action name="flyout_hotspot">
+		for(set(i,0), i LT hotspot.count, inc(i),
+			copy(hs, hotspot[get(i)]);
+			if(hs.name != name AND hs.style == 'flyoutimage' AND (hs.flying_state == 'out' OR hs.flying_state == 'flyingout'),
+				callwith(hs, flyout_hotspot() );
+			  );
+		  );
+
+		if(flying_state == 'flyingout',
+			set(flying_state, 'flyingin');
+		  ,
+			if(flying_state == 'flyingin',
+				set(flying_state, 'flyingout');
+		  	  );
+		  );
+
+		if(flying_state == 'in',
+			calc(backup_state, '0.0|' + rx + '|' + ry + '|' + rz + '|' + scale);
+			copy(backup_zorder, zorder);
+			set(flying_state, 'flyingout');
+		  );
+
+		if(flying_state == 'out',
+			set(flying_state, 'flyingin');
+		  );
+
+		if(flying_state == 'flyingout',
+			set(zorder, 99);
+			tween(flying|rx|ry|rz|scale, ('1.0|0.0|0.0|0.0|'+0.9*min(stagewidth/sourcewidth,stageheight/sourceheight)), 0.5, default, set(flying_state,'out'); );
+		  );
+
+		if(flying_state == 'flyingin',
+			sub(zorder,1);
+			tween(flying|rx|ry|rz|scale, get(backup_state), 0.5, default, set(flying_state,'in'); copy(zorder,backup_zorder); );
+		  );
+		  
+	</action>
+		 
+    <!--Закрывает слой с плавающей фоткой-->
+	<action name="popup_close">
+	    set(control.mousefovchange,1);
+		set(global.plugin[popup_bg].enabled, false);
+		set(global.events[popup].name, null);
+		tween(layer[popup_image].alpha,0,0.25);
+		tween(global.layer[popup_bg].bgalpha, 0.0,0.25);
+		tween(global.layer[popup].alpha, 0.0, 0.25, default,
+			removelayer('popup_bg', true);
+			
+			scope(private:POPUP, delete(popup); );
+		);
+	</action>
+	
+		 
+	<!--Событие фуллскрина-->
+		<events 
+		onenterfullscreen="set(layer[menu].scale, 1.2); set(plugin[uv].visible, false); set(plugin[um].visible, true)"
+		onexitfullscreen="set(layer[menu].scale, 1); set(plugin[um].visible, false); set(plugin[uv].visible, true)"
+		onnewscene="BLEND(1.0, easeInCubic)"
+		/>
+	
+    
+	
+	<scene name="scene_day_150" title="day_150" onstart="set(layer[radar].heading,70);korrect_comp();" thumburl="panos/day_150.tiles/thumb.jpg" lat="55.69995860" lng="37.49077805" alt="281.80" heading="0.0">
+		
+		<control bouncinglimits="false" />
+        
+		<view hlookat="-128" vlookat="25" fovtype="MFOV" fov="85" maxpixelzoom="2.0" fovmin="70" fovmax="108" ath="53.06" atv="12.37" limitview="range" vlookatmin="-33" />
+
+		<preview url="panos/day_150.tiles/preview.jpg" />
+		
+		 
+         <image>
+			<cube url="panos/day_150.tiles/%s/l%l/%0v/l%l_%s_%0v_%0h.jpg" multires="512,1024,2176,4352,8704" />
+			
+		</image>		
+        
+		<!--Планы-->
+		<hotspot name="s1k1" tag="plan" type="image" url="Plan/1_1.png" 
+		  ath="-159.59542764184985" atv="15.93402383377678" scale="0.12830000000000" depth="1053.40000000000009" rx="-61.20000000000000" ry="60.00000000000000" rz="65.65000000000002" ox="0.00000000000000" oy="0.00000000000000" tx="0" ty="0" tz="0" onclick="planpopup(Plan/1_1.png, 'Секция 1 Корпус 1')"
+		distorted="true" />
+		<hotspot name="s1k2" tag="plan" type="image" url="Plan/2_1.png" 
+		  ath="-151.94450066178078" atv="34.26560312412249" scale="0.03060000000000" depth="1053.40000000000009" rx="-52.20000000000000" ry="28.20000000000000" rz="37.29999999999998" ox="0.00000000000000" oy="0.00000000000000" tx="0" ty="0" tz="0" onclick="planpopup(Plan/2_1.png, 'Секция 1 Корпус 2')"
+		distorted="true" />
+		
+		<!--инфраструктура-->
+	    <hotspot scalemode="resize" tag="infrastr" edge="leftbottom" name="vkusvill" type="image" url="infra/env_vkusvill.svg" ath="-169.12120024334672" atv="26.09535690463939" scale="0.38" depth="1000"  ox="0.00000000000000" oy="0.00000000000000"  distorted="false" onover="set(hotspot[vkussvr].visible,true)" onout="set(hotspot[vkussvr].visible,false)"/>
+		<hotspot scalemode="resize" edge="leftbottom" name="vkussvr" type="image" url="route/env_4min_m.svg" visible="false" ath="-169.12120024334672" atv="26.09535690463939" scale="0.3" depth="1000" ox="0" oy="-40.00000000000000"  distorted="false"/>
+		
+		<hotspot scalemode="resize" tag="infrastr" edge="leftbottom" name="azbuka" type="image" url="infra/env_azbukavkusa.svg" ath="-152.64005079159753" atv="16.23036317635132" scale="0.44689999999999" depth="1000" rx="0" ry="0" rz="0" ox="0.00000000000000" oy="0.00000000000000" tx="0" ty="0" tz="0"  distorted="false" onover="set(hotspot[azbukavr].visible,true)" onout="set(hotspot[azbukavr].visible,false)"/>
+		<hotspot scalemode="resize" edge="leftbottom" name="azbukavr" type="image" url="route/env_7min_m.svg" visible="false" ath="-152.64005079159753" atv="16.23036317635132" scale="0.3" depth="1000" rx="0" ry="0" rz="0" ox="0.00000000000000" tx="0" ty="0" oy="-40.00000000000000"  distorted="false"/>
+	
+	    <hotspot scalemode="resize" tag="infrastr" edge="leftbottom" name="matveevka" type="image" url="infra/env_matveevsjyles.svg" ath="-178.11302945801003" atv="3.02385174785741" scale="0.56479999999999" depth="1000" rx="0" ry="0" rz="0" ox="0.00000000000000" oy="0.00000000000000" tx="0" ty="0" tz="0"  distorted="false" onover="set(hotspot[matveevkavr].visible,true)" onout="set(hotspot[matveevkavr].visible,false)"/>
+		<hotspot scalemode="resize" edge="leftbottom" name="matveevkavr" type="image" url="route/env_12min_a.svg" visible="false" ath="-178.11302945801003" atv="3.02385174785741" scale="0.3" depth="1000" rx="0" ry="0" rz="0" ox="0.00000000000000" tx="0" ty="0" tz="0" oy="-45.00000000000000"  distorted="false"/>
+	
+	</scene>
+	
+	<scene name="scene_day_80" title="day_80"  onstart="set(layer[radar1].heading,-60);korrect_comp();" thumburl="panos/day_80.tiles/thumb.jpg" lat="55.70124167" lng="37.49311250" alt="251.19" heading="0.0">
+		
+		<control bouncinglimits="false"  />
+         
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="85" maxpixelzoom="2.0" fovmin="70" fovmax="108" ath="53.06" atv="12.37" limitview="range" vlookatmin="-30" />
+
+		<preview url="panos/day_80.tiles/preview.jpg" />
+         
+		<image>
+			<cube url="panos/day_80.tiles/%s/l%l/%0v/l%l_%s_%0v_%0h.jpg" multires="512,1024,2176,4352,8704" />
+		</image>
+  
+	    
+		
+	</scene>
+
+	<scene name="scene_day_115" title="day_115" onstart="set(layer[radar1].heading,-30);korrect_comp();" thumburl="panos/day_115.tiles/thumb.jpg" lat="55.70124250" lng="37.49311194" alt="286.85" heading="0.0">
+		
+		<control bouncinglimits="false" />
+
+		<view hlookat="-128" vlookat="25" fovtype="MFOV" fov="88" maxpixelzoom="2.0" fovmin="70" fovmax="108" ath="53.06" atv="12.37" limitview="range" vlookatmin="-30" />
+
+		<preview url="panos/day_115.tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/day_115.tiles/%s/l%l/%0v/l%l_%s_%0v_%0h.jpg" multires="512,1024,2176,4352,8704" />
+		</image>
+
+	</scene>
+
+	
+
+	<scene name="scene_night_80" title="night_80" onstart="set(layer[radar1].heading,-85);korrect_comp();" thumburl="panos/night_80.tiles/thumb.jpg" lat="55.70120250" lng="37.49293306" alt="253.46" heading="0.0">
+		
+		<control bouncinglimits="false" />
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="85" ath="53.06" atv="12.37" limitview="lookat" vlookatmin="-10" />
+
+		<preview url="panos/night_80.tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/night_80.tiles/%s/l%l/%0v/l%l_%s_%0v_%0h.jpg" multires="512,1024,2176,4352,8704" />
+		</image>
+
+	</scene>
+
+	<scene name="scene_night_115" title="night_115" onstart="set(layer[radar1].heading,-85);korrect_comp();" thumburl="panos/night_115.tiles/thumb.jpg" lat="55.70120167" lng="37.49286056" alt="293.23" heading="0.0" >
+		
+		<control bouncinglimits="false" />
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="85" ath="53.06" atv="12.37" limitview="lookat" vlookatmin="-10" />
+
+		<preview url="panos/night_115.tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/night_115.tiles/%s/l%l/%0v/l%l_%s_%0v_%0h.jpg" multires="512,1024,2176,4352,8704" />
+		</image>
+
+	</scene>
+
+	<scene name="scene_night_150" title="night_150" onstart="set(layer[radar].heading,-100);korrect_comp();" thumburl="panos/night_150.tiles/thumb.jpg" lat="55.70039778" lng="37.49140056" alt="325.00" heading="0.0" >
+		
+		<control bouncinglimits="false" />
+
+		<view hlookat="50" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="85" ath="53.06" atv="12.37" limitview="lookat" vlookatmin="-10" />
+
+		<preview url="panos/night_150.tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/night_150.tiles/%s/l%l/%0v/l%l_%s_%0v_%0h.jpg" multires="512,1024,2176,4352,8704" />
+		</image>
+
+	</scene>
+
+
+</krpano>
